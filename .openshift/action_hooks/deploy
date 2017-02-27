@@ -6,7 +6,7 @@ echo "Deploying..."
 # Uncomment the following line to use Composer and automatically install dependencies on deploy.
 #
 cd $OPENSHIFT_REPO_DIR/www
-composer install
+
 
 source $OPENSHIFT_CARTRIDGE_SDK_BASH
 
@@ -91,9 +91,12 @@ if [  -f ${OPENSHIFT_REPO_DIR}.openshift/.env ]; then
   cp -f ${OPENSHIFT_REPO_DIR}.openshift/.env ${OPENSHIFT_REPO_DIR}/www/.env
 fi
 
+composer install
+
 echo 1>&2
 echo "Running 'php artisan migrate --force'..." 1>&2
 echo 1>&2
 pushd ${OPENSHIFT_REPO_DIR}/www > /dev/null
 php artisan migrate --force
+
 popd > /dev/null
