@@ -5,7 +5,7 @@ echo "Deploying..."
 
 # Uncomment the following line to use Composer and automatically install dependencies on deploy.
 #
-cd $OPENSHIFT_REPO_DIR/laravel
+cd $OPENSHIFT_REPO_DIR/www
 composer install
 
 source $OPENSHIFT_CARTRIDGE_SDK_BASH
@@ -76,24 +76,24 @@ echo 1>&2
 # from official Laravel installation and remove the log directory
 #
 if [ ! -d ${OPENSHIFT_DATA_DIR}storage ]; then
-  mv ${OPENSHIFT_REPO_DIR}/laravel/storage ${OPENSHIFT_DATA_DIR}storage
+  mv ${OPENSHIFT_REPO_DIR}/www/storage ${OPENSHIFT_DATA_DIR}storage
   rm -rf ${OPENSHIFT_DATA_DIR}storage/logs
 fi
 
 # Create symlink to new storage directory location
-ln -sf ${OPENSHIFT_DATA_DIR}storage   ${OPENSHIFT_REPO_DIR}/laravel/storage
+ln -sf ${OPENSHIFT_DATA_DIR}storage   ${OPENSHIFT_REPO_DIR}/www/storage
 
 # Create a symlink to the new log directory location
 ln -sf ${OPENSHIFT_LOG_DIR}   ${OPENSHIFT_DATA_DIR}storage/logs
 
 # Use repository .env
 if [  -f ${OPENSHIFT_REPO_DIR}.openshift/.env ]; then
-  cp -f ${OPENSHIFT_REPO_DIR}.openshift/.env ${OPENSHIFT_REPO_DIR}/laravel/.env
+  cp -f ${OPENSHIFT_REPO_DIR}.openshift/.env ${OPENSHIFT_REPO_DIR}/www/.env
 fi
 
 echo 1>&2
 echo "Running 'php artisan migrate --force'..." 1>&2
 echo 1>&2
-pushd ${OPENSHIFT_REPO_DIR}/laravel > /dev/null
+pushd ${OPENSHIFT_REPO_DIR}/www > /dev/null
 php artisan migrate --force
 popd > /dev/null
